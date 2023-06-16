@@ -1,1 +1,3 @@
-# nyu_diet_vision
+# Diet Vision
+
+In progress
