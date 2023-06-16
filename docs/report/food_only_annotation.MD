@@ -9,7 +9,7 @@ The image
 
 Original image             |  Segmented image
 :-------------------------:|:-------------------------:
-![](../../images/fish_chips.jpg)  |  ![](../images/annotated_image.png)
+![](../../apps/images/fish_chips.jpg)  |  ![](../images/annotated_image.png)
 
 ## Classification using CLIP
 
