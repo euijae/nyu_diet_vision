@@ -10,6 +10,8 @@ import numpy as np
 # show dataset info
 imagenette = load_dataset('food101')
 
+print (imagenette)
+
 labels = imagenette['train'].features['label'].names
 
 # generate sentences
