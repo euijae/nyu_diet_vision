@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Diet Vision"
 authors = ["Euijae Kim <ek3955@nyu.edu>"]
 readme = "README.md"
-packages = [{include = "diet_vision"}]
+packages = [{include = "apps"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
