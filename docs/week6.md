@@ -16,3 +16,8 @@
 
 
 ## Next week
+
+- Image clickable:
+  - let user get involved.
+  - user can also select/group segmented objects (just like google image 'select' option).
+  - opting out "gray out" annotation!
