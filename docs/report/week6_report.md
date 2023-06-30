@@ -33,6 +33,10 @@ Note that 1 represents `white` color and 0 represents `black` in the merged mask
 
 For example, the image below is obtained by merging two masks using `bitwise_or` because `or` operator indicates including both sides while `and` only counts as a `1` only if `M1[s,t]` = `M2[s,t]` = 1 
 
+Mask 1                     |  Mask 2                   | Merged Mask              
+:-------------------------:|:-------------------------:|:-------------------------:
+![](../images/1_mask_fish_chips.jpg)  |  ![](../images/2_mask_fish_chips.jpg) | ![](../images/merged_masks.jpg)
+
 All my progress code can be found [here](https://colab.research.google.com/drive/1DDLwdMnWF8Wqlwv2gXmZV2Bd4vqpvNuU?usp=sharing)
 
 ### Discussion
