@@ -7,7 +7,7 @@
 
 ## Study
 
-The report can be found [here](./report/food_only_annotation.MD)
+The report can be found [here](./report/week4_report.md)
 
 ## Next week
 

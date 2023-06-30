@@ -1,4 +1,4 @@
-# Classify then Annotate Food Only
+# Report of the Week: June 11 - 17, 2023
 
 ## Segmentation using SAM 
 
