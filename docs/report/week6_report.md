@@ -45,5 +45,3 @@ All my progress code can be found [here](https://colab.research.google.com/drive
 2. Image Clickable: SAM segments any object shown in the image. I haven't came to conclusion if we can make a segmented object clickable using SAM. 
 3. HelloPhotogrammetry: Requires a bulk number of images to compute the volume. Improvement is needed. 
 4. Pick one UI option where the DietVision application is running on.
-
-### Next Week
