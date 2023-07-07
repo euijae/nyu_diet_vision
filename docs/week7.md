@@ -16,3 +16,7 @@ Meta's SAM segments objects detected in the given image and a number of metadata
 A link to demo: https://share.vidyard.com/watch/PNck93f1FLmpNUHa1Fn5Jd?
 
 ## Next week
+
+- (ideally) highlight segment object
+- selection option must be flexibility and easy (like shift + select)
+- and then use can correct our prediction
