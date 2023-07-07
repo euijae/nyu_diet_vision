@@ -9,8 +9,10 @@
 
 ## Study
 
-- `cloudmersive` is another option which has ability to detect/classify object in the given image
-- But the accuracy is not enough to convince me to switch to it. 
+### Clickable Segment
 
+Meta's SAM segments objects detected in the given image and a number of metadata is provided. One of them is the bounding box which is a type of integer array with four elements in XYWH format. I used this data to plot a box border around each segmentation. Once a box border is set, I used JavaScript to place an anchor tag on top of each bounding box. 
+
+A link to demo: https://share.vidyard.com/watch/PNck93f1FLmpNUHa1Fn5Jd?
 
 ## Next week
