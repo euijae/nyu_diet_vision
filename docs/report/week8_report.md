@@ -35,8 +35,8 @@ MASK_DICTIONARY: numpy.ndarray
 
 **DEMO** First draft of DietVision UI
 
-**DEMO** Dragging an image to calculate a bounding box
+**DEMO** Group segments. Masks are not placed in a line. Mouse drag on an image yields a bounding box. For example, dragging spots four coordinates e.g, (0, 0), (0, 10), (10, 0), and (10, 10) and mask indices belong to the bounding box are 20 and 82, we can pick corresponding masks from `DIET_VISION_DICTIONARY` and combine them.
 
 ## Next Week
 
-1. Item 7 and 8 (link)[https://github.com/euijae/nyu_diet_vision/blob/week8/docs/week8.md#feature-of-dietvision-app]
+Item 7 and 8 (link)[https://github.com/euijae/nyu_diet_vision/blob/week8/docs/week8.md#feature-of-dietvision-app]
