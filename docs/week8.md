@@ -22,7 +22,7 @@ The report can be found [here](./report/week8_report.md)
 1. [x] 6) Use SAM to get the volume of each component
 1. [ ] 7) Use SAM to segment -> User clicks on parts that are actually food.
 1. [ ] 8) User indicates which is food and corrects any guesses that SAM has made. Merge masks.
-1. [ ] 9) Run it on the cloud server or local (cloud server = heroku, local = gradio)**
+1. [ ] 9) UI (Drag to get a bounding box, upload an image) + Run it on the cloud server or local (cloud server = heroku, local = gradio)**
 
 **Outcome**: Given the volume of each item, need to map that into grams and then into nutritional value for our four nutrients (nutrients for each segment total nutrients for all segments).
 
