@@ -1,4 +1,4 @@
-# Week 8 (July 9 - July 15, 2023)
+# Week 8 (July 9 - 15, 2023)
 
 ## Last week
 
