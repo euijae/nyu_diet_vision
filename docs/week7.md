@@ -1,4 +1,4 @@
-# Week 7 (July 2 - July 8, 2023)
+# Week 7 (July 2 - 8, 2023)
 
 ## Last week
 

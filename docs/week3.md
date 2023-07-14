@@ -1,4 +1,4 @@
-# Week 3 (June 4 - June 10, 2023)
+# Week 3 (June 4 - 10, 2023)
 
 ## Last week
 

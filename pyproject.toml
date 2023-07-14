@@ -19,6 +19,8 @@ supervision = "^0.10.0"
 datasets = "^2.13.0"
 transformers = "^4.30.2"
 pillow = "^9.5.0"
+matplotlib = "^3.7.2"
+gradio = "^3.36.1"
 
 
 [build-system]

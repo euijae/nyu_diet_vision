@@ -1,4 +1,4 @@
-# Week 4 (June 11 - June 17, 2023)
+# Week 4 (June 11 - 17, 2023)
 
 ## Last week
 
