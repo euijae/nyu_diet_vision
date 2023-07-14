@@ -35,7 +35,4 @@ MASK_DICTIONARY: numpy.ndarray
 
 **DEMO** First draft of DietVision UI
 
-### Demo Items
-
-1. Dragging a mouse on an image and generating a bounding box
-2. Annotate 
+**DEMO** Dragging an image to calculate a bounding box
