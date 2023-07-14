@@ -39,7 +39,7 @@ MASK_DICTIONARY: numpy.ndarray
 
 ## Next Week
 
-Item 7 and 8 ([link](https://github.com/euijae/nyu_diet_vision/blob/week8/docs/week8.md#feature-of-dietvision-app))
+Item 7 and 8 ([link](https://github.com/euijae/nyu_diet_vision/blob/main/docs/week8.md#feature-of-dietvision-app))
 
 - 1. Segmentation and then user assigns foods to segments using Thibault’s database
 - 2. Volume estimation
