@@ -1,4 +1,4 @@
-# Week 5 (June 18 - June 24, 2023)
+# Week 5 (June 18 - 24, 2023)
 
 ## Last week
 
