@@ -36,3 +36,7 @@ MASK_DICTIONARY: numpy.ndarray
 **DEMO** First draft of DietVision UI
 
 **DEMO** Dragging an image to calculate a bounding box
+
+## Next Week
+
+1. Item 7 and 8 (link)[https://github.com/euijae/nyu_diet_vision/blob/week8/docs/week8.md#feature-of-dietvision-app]
