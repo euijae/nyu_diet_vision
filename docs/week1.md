@@ -1,4 +1,4 @@
-# Week 1 (May 21-27, 2023)
+# Week 1 (May 21 - 27, 2023)
 
 ## Meeting outcome from the previous week
 
