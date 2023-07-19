@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link href="https://assets.website-files.com/5f6bc60e665f54545a1e52a5/610d3e1407cf0329b8b8ade4_favicon-32x32.png" rel="shortcut icon" type="image/x-icon">
+        <link rel="stylesheet" href="{{ url_for('static', path='/css/main.css') }}">
+
+        <title>DietVision</title>
+        <meta name="title" content="DietVision 2023">
+        <meta name="description" content="Draw polygons on an image and retrieve the coordinates for use in your computer vision projects.">
+
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://roboflow.com/polygonzone">
+        <meta property="og:title" content="PolygonZone by Roboflow">
+        <meta property="og:description" content="Draw polygons on an image and retrieve the coordinates for use in your computer vision projects.">
+        <meta property="og:image" content="https://camo.githubusercontent.com/ee21eb5f43b191dbfd154dfbc26f9ce731f43dc66749ca6cde23557f48136a1a/68747470733a2f2f6d656469612e726f626f666c6f772e636f6d2f6f70656e2d736f757263652f7375706572766973696f6e2f726f626f666c6f772d7375706572766973696f6e2d62616e6e65722e706e673f696b2d73646b2d76657273696f6e3d6a6176617363726970742d312e342e33267570646174656441743d31363734303632383931303838">
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="https://roboflow.com/polygonzone">
+        <meta property="twitter:title" content="PolygonZone by Roboflow">
+        <meta property="twitter:description" content="Draw polygons on an image and retrieve the coordinates for use in your computer vision projects.">
+        <meta property="twitter:image" content="https://camo.githubusercontent.com/ee21eb5f43b191dbfd154dfbc26f9ce731f43dc66749ca6cde23557f48136a1a/68747470733a2f2f6d656469612e726f626f666c6f772e636f6d2f6f70656e2d736f757263652f7375706572766973696f6e2f726f626f666c6f772d7375706572766973696f6e2d62616e6e65722e706e673f696b2d73646b2d76657273696f6e3d6a6176617363726970742d312e342e33267570646174656441743d31363734303632383931303838">
+    </head>
+    <body>
+        <!-- <py-script>
+            
+        </py-script> -->
+        <main>
+            <!-- <img class="banner" src="https://media.roboflow.com/polygonzone/polygonzone-banner.png?ik-sdk-version=javascript-1.4.3&updatedAt=1676391478845" /> -->
+            <div class="banner"><h2>DietVision</h2></div>
+            <div class="flex">
+                <div class="left">
+                    <h1>Food Image</h1>
+                    <canvas id="canvas"></canvas>
+                    <div style="margin-top: 20px;">
+                        <a href="" id="saveImage" class="widgetButton">Upload</a>
+                        <a href="" id="clear" class="widgetButton">Clear</a>
+                        <p class="show_normalized" id="coords" style="display: none;">x: <span id="x"></span> | y: <span id="y"></span></p>
+                        <br>
+                    </div>
+                </div>
+                <div class="right">
+                    <h2>Food Data</h2>
+                    <p>Nutritional information of your food</p>
+                    <pre id="python">
+                        <code>
+                        </code>
+                    </pre>
+                    <a href="" id="clipboard" class="widgetButton">Copy My Food Data to Clipboard</a>
+                    <div class="show_normalized" style="margin-bottom: 25px; display:none">
+                        <label for="normalize_checkbox">Show Normalized Points from 0-1</label>
+                        <input type="checkbox" id="normalize_checkbox" name="normalize_checkbox" value="normalize_checkbox">
+                    </div>
+                    <details style="display: none">
+                        <summary>View JSON Points</summary>
+                        <h2>JSON Points</h2>
+                        <a href="" id="clipboardJSON" class="widgetButton">Copy JSON to Clipboard</a>
+                        <pre id="json">
+                            <code>
+                            </code>
+                        </pre>
+                    </details>
+                </div>
+            </div>
+            <footer>
+                <p>Made with ❤️ by Prof. <a href="https://cs.nyu.edu/~shasha/" target="_blank">Dennis Shasha</a>'s Research Group at <a href="https://nyu.edu/" target="_blank">New York University</a> </p>
+            </footer>
+        </main>
+        <script src="{{ url_for('static', path='/js/script.js') }}"></script>
+    </body>
+</html>
