@@ -1,1 +1,1 @@
-from .diet_vision import DietVision
+from .diet_vision import *
