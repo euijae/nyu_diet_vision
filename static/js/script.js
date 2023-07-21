@@ -95,39 +95,6 @@ function getScaledCoords(e) {
     return [x / scaleFactor, y / scaleFactor];
 }
 
-function drawAllPolygons () {
-    // draw all points for previous regions
-    for (var i = 0; i < masterPoints.length; i++) {
-        var newpoints = masterPoints[i];
-        // set color
-        ctx.strokeStyle = masterColors[i];
-        for (var j = 1; j < newpoints.length; j++) {
-            // draw all lines
-            drawLine(newpoints[j - 1][0], newpoints[j - 1][1], newpoints[j][0], newpoints[j][1]);
-        }
-        drawLine(newpoints[newpoints.length - 1][0], newpoints[newpoints.length - 1][1], newpoints[0][0], newpoints[0][1]);
-        // draw arc around each point
-        for (var j = 0; j < newpoints.length; j++) {
-            ctx.beginPath();
-            ctx.strokeStyle = masterColors[i];
-            ctx.arc(newpoints[j][0], newpoints[j][1], 5, 0, 2 * Math.PI);
-            // fill with white
-            ctx.fillStyle = 'white';
-            ctx.fill();
-            ctx.stroke();
-        }
-        // fill
-        ctx.beginPath();
-        ctx.fillStyle = opaque_color;
-        ctx.moveTo(newpoints[0][0], newpoints[0][1]);
-        for (var j = 1; j < newpoints.length; j++) {
-            ctx.lineTo(newpoints[j][0], newpoints[j][1]);
-        }
-        ctx.closePath();
-        ctx.fill();
-    }
-}
-
 function clearall() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.drawImage(img, 0, 0);
@@ -156,17 +123,41 @@ canvas.addEventListener('dragover', function(e) {
     e.preventDefault();
 });
 
-// canvas.addEventListener('wheel', function(e) {
-//     var delta = Math.sign(e.deltaY);
-//     zoom(delta);
-// });
-
 document.querySelector('#saveImage').addEventListener('click', function(e) {
     e.preventDefault();
-    var link = document.createElement('a');
-    link.download = 'image.png';
-    link.href = canvas.toDataURL();
-    link.click();
+
+    const xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == xmlHttp.OPENED) {
+            console.log('/upload/image >> xmlHttp.readyState == xmlHttp.OPENED')
+            $('#cover-spin').show(0)
+        }
+        if (xmlHttp.readyState == xmlHttp.DONE) {
+            img.src = '../../static/images/fish_chips.jpg'
+            img.onload = function() {
+                scaleFactor = 0.25;
+                canvas.style.width = img.width * scaleFactor + 'px';
+                canvas.style.height = img.height * scaleFactor + 'px';
+                canvas.width = img.width;
+                canvas.height = img.height;
+                canvas.style.borderRadius = '10px';
+                ctx.drawImage(img, 0, 0);
+            };
+            // show coords
+            document.getElementById('coords').style.display = 'inline-block';
+            // EUIJAE
+            canvas.style.cursor = 'pointer';
+            $('#cover-spin').hide()
+        }
+    }
+
+    xmlHttp.open("GET", 'http://127.0.0.1:8000/upload/image', true);
+    xmlHttp.onprogress = function() {
+        $('#cover-spin').show(0)
+        console.log('/upload/image >> onprogress')
+        console.log("LOADING: ", xmlHttp.status);
+    };
+    xmlHttp.send(null)
 });
 
 let x1;
@@ -193,6 +184,10 @@ canvas.addEventListener('mouseup', function(e) {
 
     if (x1 == x2 && y1 == y2) {
         console.log('clicked ... ');
+        x1 = Math.floor(x1);
+        y1 = Math.floor(y1);
+        x2 = Math.floor(x2);
+        y2 = Math.floor(y2);
     } else {
         console.log(`(x1, y1, x2, y2) = (${x1}, ${y1}, ${x2}, ${y2}) / mouseup`)
 
@@ -213,16 +208,59 @@ canvas.addEventListener('mouseup', function(e) {
 
         }
 
+        x1 = Math.floor(sx);
+        y1 = Math.floor(sy);
+        x2 = Math.floor(dx);
+        y2 = Math.floor(dy);
+
         let width  = Math.abs(sx-dx);
         let height = Math.abs(sy-dy);
         
         ctx.beginPath();
         ctx.strokeStyle = rgb_color;
-        ctx.lineWidth = 5;
+        ctx.lineWidth = 4;
         ctx.fill();
         ctx.rect(sx, sy, width, height);
         ctx.stroke();
     }
+
+    const xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState == xmlHttp.OPENED) {
+            $('#cover-spin').show(0)
+        }
+        if (xmlHttp.readyState == xmlHttp.DONE) {
+            const responseObject = JSON.parse(xmlHttp.responseText);
+            const food_class = responseObject.class;
+            const food_area = responseObject.area
+            const file_image_name = responseObject.path
+
+            var code_template = `food_class: ${food_class} || food_area: ${food_area}` ;
+            document.querySelector('#python').innerHTML = code_template;
+            
+            img.src = '../../static/images/fish_chips.jpg'
+            img.onload = function() {
+                scaleFactor = 0.25;
+                canvas.style.width = img.width * scaleFactor + 'px';
+                canvas.style.height = img.height * scaleFactor + 'px';
+                canvas.width = img.width;
+                canvas.height = img.height;
+                canvas.style.borderRadius = '10px';
+                ctx.drawImage(img, 0, 0);
+                var img3 = new Image();
+                img3.src = `../../static/images/${file_image_name}`;
+                img3.onload = function() {
+                    ctx.drawImage(img3, 0, 0)
+                }
+            };
+            $('#cover-spin').hide();
+        }
+    }
+    xmlHttp.open("GET", `http://127.0.0.1:8000/segment/data/${x1}/${y1}/${x2}/${y2}`, true);
+    xmlHttp.onprogress = function() {
+        console.log("LOADING: ", xmlHttp.status);
+    };
+    xmlHttp.send(null)
 });
 
 // on canvas hover, if cursor is pointer, draw line from last point to cursor
@@ -240,55 +278,6 @@ canvas.addEventListener('mousemove', function(e) {
 
     xcoord.innerHTML = x;
     ycoord.innerHTML = y;
-
-    // EUIJAE
-    // if (canvas.style.cursor == 'pointer') {
-    //     //ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //     ctx.drawImage(img, 0, 0);
-    //     for (var i = 0; i < points.length - 1; i++) {
-    //         // draw arc around each point
-    //         ctx.beginPath();
-    //         ctx.strokeStyle = rgb_color;
-    //         ctx.arc(points[i][0], points[i][1], 5, 0, 2 * Math.PI);
-    //         // fill with white
-    //         ctx.fillStyle = 'white';
-    //         ctx.fill();
-    //         ctx.stroke();
-    //         drawLine(points[i][0], points[i][1], points[i + 1][0], points[i + 1][1]);
-    //     }
-    //     if ((points.length > 0 && drawMode == "polygon") || (points.length > 0 && points.length < 2 && drawMode == "line")) {
-    //         ctx.beginPath();
-    //         ctx.strokeStyle = rgb_color;
-    //         ctx.arc(points[i][0], points[i][1], 5, 0, 2 * Math.PI);
-    //         // fill with white
-    //         ctx.fillStyle = 'white';
-    //         ctx.fill();
-    //         ctx.stroke();
-    //         drawLine(points[points.length - 1][0], points[points.length - 1][1], x, y);
-
-    //         if (points.length == 2 && drawMode == "line") {
-    //             console.log("line");
-    //             // draw arc around each point
-    //             ctx.beginPath();
-    //             ctx.strokeStyle = rgb_color;
-    //             ctx.arc(points[0][0], points[0][1], 5, 0, 2 * Math.PI);
-    //             // fill with white
-    //             ctx.fillStyle = 'white';
-    //             ctx.fill();
-    //             ctx.stroke();
-    //             masterPoints.push(points);
-    //             points = [];
-    //         }
-    //     }
-    //     var parentPoints = [];
-
-    //     for (var i = 0; i < masterPoints.length; i++) {
-    //         parentPoints.push(masterPoints[i]);
-    //     }
-    //     parentPoints.push(points);
-
-    //     drawAllPolygons();
-    // }
 });
 
 window.addEventListener('keydown', function(e) {
@@ -366,8 +355,8 @@ canvas.addEventListener('drop', function(e) {
         canvas.style.borderRadius = '10px';
         ctx.drawImage(img, 0, 0);
         // TODO 
-        img2.src = '../apps/images/test_test.png';
-        ctx.drawImage(img2, 0, 0)
+        // img2.src = '../apps/images/test_test.png';
+        // ctx.drawImage(img2, 0, 0)
     };
     // show coords
     document.getElementById('coords').style.display = 'inline-block';
@@ -457,19 +446,6 @@ canvas.addEventListener('click', function(e) {
     parentPoints.push(points);
 
     // writePoints(parentPoints);
-
-    const xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", 'http://127.0.0.1:8000/upload', true);
-    xmlHttp.send(null);
-
-    xmlHttp.onreadystatechange = function() { 
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(xmlHttp.responseText);
-    }
-
-    console.log(xmlHttp.responseText)
-
-    return xmlHttp.responseText
 });
 
 document.querySelector('#normalize_checkbox').addEventListener('change', function(e) {
