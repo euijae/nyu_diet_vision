@@ -15,7 +15,7 @@ The image
 
 Original image             |  Segmented image
 :-------------------------:|:-------------------------:
-![](../../apps/images/fish_chips.jpg)  |  ![](../images/annotated_image.png)
+![](../apps/images/fish_chips.jpg)  |  ![](./images/annotated_image.png)
 
 ### Mask
 
@@ -24,9 +24,9 @@ Typically, each pixel is assigned a number between 0 and 255, where 0 represents
 
 The image on the left is the mask of the table. The other image shows table without masking and applying grayscale color.
 
-Masked table             |  Unmasked table (gray)
+Mask             |  Mask (Filled with original colors)
 :-------------------------:|:-------------------------:
-![](../images/classification_mask_fried_fish.jpg)  |  ![](../images/classification_unmask_fried_fish.jpg)
+![](./images/classification_mask_fried_fish.jpg)  |  ![](./images/classification_unmask_fried_fish.jpg)
 
 ## Image Classification
 
