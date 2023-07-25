@@ -1,13 +1,14 @@
 # DietVision
 
-TODO: Oneliner definition of DietVision
+What you eat and how much you eat. 
 
-## Human vs Machine
+## Computer Vision
+
+### Human vs Machine
 
 What human sees             |  What machine sees
 :-------------------------:|:-------------------------:
 ![](./images/wasq.jpeg)  |  ![](./images/matrix.png)
-
 
 ## Behind the Scene
 
@@ -58,3 +59,5 @@ CLIP is trained with the Food 101 model. It processes the given image and return
 
 ## Demo
 
+1. Select an object in image
+2. 
