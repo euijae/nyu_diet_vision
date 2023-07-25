@@ -1,5 +1,7 @@
 # DietVision
 
+## What's the DietVision?
+
 What you eat and how much you eat. 
 
 ## Computer Vision
