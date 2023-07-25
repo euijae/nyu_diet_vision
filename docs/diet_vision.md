@@ -61,5 +61,4 @@ CLIP is trained with the Food 101 model. It processes the given image and return
 
 ## Demo
 
-1. Select an object in image
-2. 
+Select an object in image
