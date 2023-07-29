@@ -1,8 +1,6 @@
 # Diet Vision
 
-## Run App
-
-### Command
+### Run the application
 
 ```shell
 python main.py
