@@ -27,7 +27,6 @@ var canvas = document.getElementById('canvas');
 
 var ctx = canvas.getContext('2d');
 var img = new Image();
-var img3 = new Image();
 var rgb_color = color_choices[Math.floor(Math.random() * color_choices.length)] 
 var opaque_color =  'rgba(0,0,0,0.5)';
 
@@ -188,8 +187,6 @@ canvas.addEventListener('click', function(e) {
     }
     // add "points"
     parentPoints.push(points);
-
-    // writePoints(parentPoints);
 });
 
 document.querySelector('#saveImage').addEventListener('click', function(e) {
@@ -527,18 +524,6 @@ canvas.addEventListener('drop', function(e) {
     canvas.style.cursor = 'pointer';
 });
 
-// $('#saveImageTest').on('click', function(e) {
-//     e.preventDefault();
-//     $('#selectFoodClass').addClass('green');
-//     $('#tableBody1').css('display', 'none');
-//     $('#tableBody3').css('display', '');
-// });
-    
-// $('#submitFoodClassInput').on('click', function(e) {
-//     e.preventDefault();
-//     let value = $('#myFoodClassInput').val();
-// })
-
 $('#selectFoodClass').on('click', function(e) {
     e.preventDefault();
     $('#selectFoodClass').addClass('green');
@@ -589,7 +574,3 @@ $('#modifyFoodClass').on('click', function(e) {
 
     $('#tableBody3 tr').remove();
 });
-
-function isButtonActive(selector) {
-    return $("#" + selector).hasClass('green');
-}
