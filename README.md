@@ -1,3 +1,9 @@
 # Diet Vision
 
-In progress
+## Run App
+
+### Command
+
+```shell
+python main.py
+```
