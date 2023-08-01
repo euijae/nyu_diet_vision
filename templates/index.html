@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <link href="http://raw.githubusercontent.com/euijae/nyu_diet_vision/week10/static/images/nyu_logo.png" rel="shortcut icon" type="image/x-icon">
+        <link href="http://raw.githubusercontent.com/euijae/nyu_diet_vision/main/static/images/nyu_logo.png" rel="shortcut icon" type="image/x-icon">
 
         <title>DietVision</title>
         <meta name="title" content="DietVision 2023">
@@ -16,11 +16,15 @@
             <div class="flex">
                 <div class="left">
                     <!-- <h2>Food Image</h2> -->
+                    <div class="ui green compact message" id="introMessage">
+                        <div class="header">
+                          Please upload your image on the image box below
+                        </div>
+                      </div>
                     <canvas id="canvas"></canvas>
                     <div style="margin-top: 20px;">
                         <button id="saveImage" class="ui primary button">Upload</button>
                         <button id="clear" class="ui secondary button">Clear</button>
-                        <!-- <p class="show_normalized" id="coords" style="display: none;">x: <span id="x"></span> | y: <span id="y"></span></p> -->
                     </div>
                 </div>
                 <div class="right">
@@ -31,6 +35,7 @@
                             <div class="or"></div>
                             <button class="ui button" id="modifyFoodClass">Modfiy Food Class</button>
                         </div>
+                        <input id="fileContainer" type="file" name="uploaded_file" style="visibility: hidden;position: absolute;top:0;">
                     </div>
 
                     <div class="ui center aligned basic segment">
@@ -40,7 +45,7 @@
                                 <input class="prompt" id="myFoodClassInput" type="text" placeholder="Search food...">
                                 <i class="search icon"></i>
                             </div>
-                            <button id="submitFoodClassInput" class="ui button disabled">
+                            <button class="ui button disabled" id="submitFoodClassInput">
                                 Submit
                             </button>
                             <div class="results"></div>
@@ -55,20 +60,14 @@
                                 <tr>
                                     <th>Food</th>
                                     <th>Volume</th>
-                                    <th>Calories</th>
                                 </tr>
                             </thead>
                             <tbody id="tableBody1">
                                 <tr>
-                                    <td colspan="3">No Image is Found</td>
+                                    <td colspan="2">No Image is Found</td>
                                 </tr>
                             </tbody>
                             <tbody id="tableBody2" style="display: none">
-                                <tr>
-                                    <td colspan="3">Modfiying is in progress ...</td>
-                                </tr>
-                            </tbody>
-                            <tbody id="tableBody3" style="display: none">
                                 
                             </tbody>
                         </table>
