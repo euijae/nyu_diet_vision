@@ -1,7 +1,7 @@
-const ontologyMap = new Map(Object.entries(ontology))
+const usdaFoodsMap = new Map(Object.entries(usdaFoods))
 let newFoodClassList = []
 
-for (let [key, category] of ontologyMap.entries()) {
+for (let [key, category] of usdaFoodsMap.entries()) {
     for (let product of category) {
         newFoodClassList.push({ 'title': product })
     }
@@ -48,12 +48,14 @@ document.querySelector('#clear').addEventListener('click', function(e) {
     if (imageReady) {
         const xmlHttp = new XMLHttpRequest();
         xmlHttp.onreadystatechange = function() { 
-            if (xmlHttp.readyState === xmlHttp.DONE && xmlHttp.status === 200) {
+            if (xmlHttp.readyState === xmlHttp.DONE) {
+                if (xmlHttp.status === 200) {
+                    imageReady = false;
+                    annotatorImageName = null;
+                    lastOverlayImageName = null;
+                }
+
                 $('#cover-spin').hide()
-                imageReady = false;
-                isUpdateFoodClass = false;
-                annotatorImageName = null;
-                lastOverlayImageName = null;
             }
         }
         xmlHttp.open("GET", 'http://127.0.0.1:8000/clear', true);
@@ -102,7 +104,7 @@ function uploadFile(filename, filedata) {
     })
     .then(response => response.json())
     .then(response => {
-        console.log(response);
+        console.log(`[uploadFile] ${JSON.stringify(response)}`);
         annotatorImageName = response.file_name;
         imageReady = true;
         canvas.style.cursor = 'pointer';
@@ -145,7 +147,7 @@ canvas.addEventListener('mouseup', function(e) {
         x2 = getScaledCoords(e)[0];
         y2 = getScaledCoords(e)[1];
 
-        console.log(`(x1, y1, x2, y2) = (${x1}, ${y1}, ${x2}, ${y2}) / mouseup`)
+        console.log(`(x1, y1, x2, y2) = (${x1}, ${y1}, ${x2}, ${y2}) / mouseup / modifyFoodClass`)
 
         if (y1 > y2) [y1, y2] = [y2, y1]
         if (x1 > x2) [x1, x2] = [x2, x1]
@@ -171,7 +173,7 @@ canvas.addEventListener('mouseup', function(e) {
                     lastOverlayImageName = file_image_name;
                     createImage(false, false);
                 }
-                
+
                 $('#cover-spin').hide();
             }
         }
@@ -188,19 +190,25 @@ canvas.addEventListener('mouseup', function(e) {
         xmlHttp.send(JSON.stringify({ 'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2 }))
     } else {
         xmlHttp.onreadystatechange = function() { 
-            if (xmlHttp.readyState === xmlHttp.DONE && xmlHttp.status === 200) {
-                const responseObject = JSON.parse(xmlHttp.responseText);
-                const food_class = responseObject.class;
-                const food_area = responseObject.volume;
+            if (xmlHttp.readyState === xmlHttp.DONE) { 
+                if (xmlHttp.status === 200) {
+                    const responseObject = JSON.parse(xmlHttp.responseText);
+                    const food_class = responseObject.class;
+                    const food_area = responseObject.volume;
+
+                    console.log(`food_class = ${food_class}, food_area = ${food_area}`);
+                    console.log(`(x1, y1) = (${x1}, ${y1}) / mouseup / selectFoodClass`)
+
+                    $('#tableBody2 tr').remove();
+                    $('#tableBody2').append(`
+                        <tr>
+                            <td>${food_class}</td>
+                            <td>${food_area}</td>
+                        </tr>
+                    `);
+                }
 
                 $('#cover-spin').hide();
-                $('#tableBody2 tr').remove();
-                $('#tableBody2').append(`
-                    <tr>
-                        <td>${food_class}</td>
-                        <td>${food_area}</td>
-                    </tr>
-                `);
             }
         }
         xmlHttp.open("POST", 'http://127.0.0.1:8000/segment/data', true);
@@ -253,7 +261,7 @@ $('#selectFoodClass').on('click', function(e) {
     toggleSelectModfiy(true);
 
     if (imageReady) {
-        createImage(false, true);
+        createImage(false);
     }
 });
 
@@ -309,7 +317,7 @@ function createImage(isEmptyFile, isAnnotator = true) {
     var scaleFactor = isEmptyFile ? 0.5 : 0.25;
 
     if (isEmptyFile) {
-        img.src = '../../static/images/empty.png';
+        img.src = '../../static/images/read-only/empty.png';
         img.onload = function() {
             canvas.style.width = img.width * scaleFactor + 'px';
             canvas.style.height = img.height * scaleFactor + 'px';
