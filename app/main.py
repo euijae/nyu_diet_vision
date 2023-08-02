@@ -1,11 +1,11 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Form
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 from .diet_vision import DietVision
 from pydantic import BaseModel
-import requests
+import requests, os, base64
 
 class BBox(BaseModel):
     x1: float
@@ -39,6 +39,7 @@ app.add_middleware(
 
 app.dv_instance = None
 
+
 templates = Jinja2Templates(directory='templates')
 round_off = lambda x: map(lambda f : round(float(f)), x)
 
@@ -54,51 +55,61 @@ async def main(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
-@app.get("/upload/image")
-async def upload_image(request: Request):
-    getInstance().upload_image()
-    return {"message": "upload_image is successfully completed"}
-
-
 @app.post('/segment/group')
 async def group_segments(bbox: BBox):
     x1, y1, x2, y2 = list(round_off([bbox.x1, bbox.y1, bbox.x2, bbox.y2]))
     indices = getInstance().find_mask_index_list(list(round_off([x1, y1, x2, y2])), True)
-    # indices = getInstance().update_mask_index_list(indices)
-    overlay_image_path = getInstance().create_overlay_image(indices).split('/')[-1]
 
-    return {'path': overlay_image_path}
+    overlay_image_path = getInstance().create_overlay_image(False, indices)
+    overlay_image_name = overlay_image_path.split('/')[-1]
+
+    return {'file_name': overlay_image_name}
 
 
 @app.post('/segment/data')
 async def get_object_data(bbox: BBox):
     x1, y1, x2, y2 = list(round_off([bbox.x1, bbox.y1, bbox.x2, bbox.y2]))    
-    indices = getInstance().find_mask_index_list(list(round_off([x1, y1, x2, y2])))
-    indices = getInstance().expand_mask_index_list(indices)
+    indices1 = getInstance().find_mask_index_list(list(round_off([x1, y1, x2, y2])))
+    indices2 = getInstance().expand_mask_index_list(indices1)
 
-    overlay_image_path = getInstance().create_overlay_image(indices).split('/')[-1]
-    obj_class, area = getInstance().get_data_by_mask_index(mask_index=indices[0])
-    calories = get_nutrition_info(obj_class)
+    obj_class, area = getInstance().get_data_by_mask_index(mask_index=indices2[0])
     
-    return {
-        'class': obj_class, 
-        'volume': area, 
-        'path': overlay_image_path,
-        'calories': calories
-    }
+    return { 'class': obj_class, 'volume': area }
 
 
 @app.post('/classify/modify')
-async def correct_food_class(fc: FoodClass):
-    getInstance().correct_food_class(fc.food_class)
+async def update_food_class(fc: FoodClass):
+    getInstance().update_food_class(fc.food_class)
+    overlay_image_path = getInstance().create_overlay_image(True)
+    file_name = overlay_image_path.split('/')[-1]
 
-    return {'updated_food_class': fc.food_class }
+    return { 'updated_food_class': fc.food_class, 'file_name': file_name }
 
 
 @app.get('/clear')
 async def clear_images(request: Request):
     app.dv_instance = None
-    return {'message': 'Hello World'}
+    return {'message': 'Successfully cleared the DietVision'}
+
+
+@app.post('/upload/image')
+async def save_image(filename: str = Form(...), filedata: str = Form(...)):    
+    try:
+        static_directory = getInstance().HOME
+        image_directory = os.path.join(static_directory, 'images')
+        file_location = os.path.join(image_directory, filename)
+
+        image_as_bytes = str.encode(filedata)
+        img_recovered = base64.b64decode(image_as_bytes)
+
+        with open(file_location, 'wb') as f:
+            f.write(img_recovered)
+            overlay_image_path = getInstance().upload_image(filename)
+            overlay_image_name = overlay_image_path.split('/')[-1]
+            return { "file_name": overlay_image_name }
+    except Exception:
+        return { "message": "There was an error uploading the file" }
+
 
 def get_nutrition_info(food_name):
     food_name = food_name.replace('_', ' ')
