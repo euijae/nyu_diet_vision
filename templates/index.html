@@ -18,7 +18,7 @@
                     <!-- <h2>Food Image</h2> -->
                     <div class="ui green compact message" id="introMessage">
                         <div class="header">
-                          Please upload your image on the image box below
+                          Please upload your image
                         </div>
                       </div>
                     <canvas id="canvas"></canvas>
@@ -68,28 +68,10 @@
                                 </tr>
                             </tbody>
                             <tbody id="tableBody2" style="display: none">
-                                
                             </tbody>
                         </table>
                     </div>
-
-
-                    
-                    
-                    <!-- <pre id="python">
-                        <code>
-                        </code>
-                    </pre> -->
-                    <!-- <a href="" id="updateFoodClass" class="widgetButton">Update Fodd</a>
-                    <a href="" id="switchButton" class="widgetButton">Group On/Off</a>
-                    <a href="" id="clipboard" class="widgetButton">Copy My Food Data to Clipboard</a> -->
                 </div>
-            </div>
-
-            <!-- old code - legacy -->
-            <div class="show_normalized" style="margin-bottom: 25px; display:none">
-                <label for="normalize_checkbox">Show Normalized Points from 0-1</label>
-                <input type="checkbox" id="normalize_checkbox" name="normalize_checkbox" value="normalize_checkbox">
             </div>
 
             <!-- spinner -->
@@ -105,10 +87,11 @@
         <!-- css stylesheets -->
         <link rel="stylesheet" href="{{ url_for('static', path='/css/main.css') }}" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+
         <!-- JavaScript library -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>        
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
-        <script src="{{ url_for('static', path='/js/ontology.js') }}"></script>
+        <script src="{{ url_for('static', path='/js/usdaFoods.js') }}"></script>
         <script src="{{ url_for('static', path='/js/script.js') }}"></script>
     </body>
 </html>
