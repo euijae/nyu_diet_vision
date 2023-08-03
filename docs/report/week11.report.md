@@ -40,7 +40,7 @@ Select `Mask 1`              |  Unselect `Mask 1`
 ![](../images/mask_1_island.png)
 *Fig.3.1*                  
 
-There are two islands (circled in *Fig.3.1*). If a user drags the region (shown in rectangle), since the two mask islands (circled in *Fig.3.1*) belong to `Mask 1` although these are separate from the main area, the backend understands that an user tries to select objects in the rectangle region along with the `Mask 1`. This makes segmentation group selection unpredictable until we look into every mask.
+There are two islands (circled in *Fig.3.1*). If a user select the region shown in the *Fig.3.1* (rectangle), since the two mask islands (circled in *Fig.3.1*) belong to `Mask 1` although these are separate from the main area, the backend understands that an user tries to select objects in the rectangle region along with the `Mask 1`. This makes segmentation group selection unpredictable until we look into every mask.
 
 ### Another Option - A winner takes it all
 
