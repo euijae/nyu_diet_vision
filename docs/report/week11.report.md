@@ -4,7 +4,7 @@
 
 ### A pixel co-owned by masks
 
-An image is translated into a matrix and each entry in a matrix is called pixel and it holds a color value. In my `DietVision` class [(here)]('../../../../app/diet_vision.py'), I have a method that maps a pixel `(m, n)` to mask index (indicies). For example, if (x, y) = (1784, 700) pixel does belong to `mask 1`, the pixel is mapped into the the the owning index as `diet_vision_dictionary[1]['nonzero_at'] = {(1784, 700), ...}`. `diet_vision_dictionary[1]['nonzero_at']` is a list of pixels that belong to `Mask 1`. Here's a schema of the variable `diet_vision_dictionary`.
+An image is translated into a matrix and each entry in a matrix is called pixel and it holds a color value. In my `DietVision` class [(here)]('../../../../app/diet_vision.py'), I have a method that maps a pixel `(m, n)` to mask index (indices). For example, if (x, y) = (1784, 700) pixel does belong to `mask 1`, the pixel is mapped into the the the owning index as `diet_vision_dictionary[1]['nonzero_at'] = {(1784, 700), ...}`. `diet_vision_dictionary[1]['nonzero_at']` is a list of pixels that belong to `Mask 1`. Here's a schema of the variable `diet_vision_dictionary`.
 
 ```python
 diet_vision_dictionary: list(dict) = [{
