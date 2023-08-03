@@ -44,7 +44,7 @@ There are two islands (circled in *Fig.3.1*). If a user select the region shown 
 
 ### Another Option - A winner takes it all
 
-In this context, a winner refers to a mask with larger area. To fix the issue explained above, I tried another data structure to map a pixel (m, n) into a mask index.
+In this context, a winner refers to a mask with larger area. To fix the issue explained above, I designed another data structure that maps a pixel (m, n) to a mask index.
 
 ```python
 mask_dictionary: numpy.ndarray = [
