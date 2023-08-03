@@ -55,7 +55,7 @@ mask_dictionary: numpy.ndarray = [
 ]
 ```
 
-If a pixel `(m, n)` is shared with `Mask 1` and `Mask 2`, then mapping logic from pixel point to mask index picks one with the larger mask area. If we end up with `mask_dictionary[m][n] = 1`, it indicates that `area(Mask 1) > area(Mask 2)`. In this specific "Fried Chips" case, this `A winner takes it all` workaround works. However, this still has much to improve. The segmentation accuracy drops when `Mask X` is entirely a part of `Mask Y`. It means that a user won't be able to touch `Mask X`, but instead, `Mask Y` will always be annotated.
+If a pixel `(m, n)` is shared with `Mask 1` and `Mask 2`, then mapping logic from pixel point to mask index picks one with the larger mask area. If we end up with `mask_dictionary[m][n] = 1`, it indicates that `area(Mask 1) > area(Mask 2)`. In this specific "Fried Chips" case, this `A winner takes it all` workaround works. However, this still has much to improve. The segmentation accuracy drops when `Mask X` is entirely a part of `Mask Y`. It means that a user won't ever be able to touch `Mask X`, but instead, `Mask Y` will always be annotated. 
 
 ## Conclusion
 
