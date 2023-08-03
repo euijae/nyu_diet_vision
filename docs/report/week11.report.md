@@ -33,6 +33,14 @@ Select `Mask 1`              |  Unselect `Mask 1`
 ![](../images/mask1_click.png)|![](../images/mask1_unclick.png)
 *Fig.2.1*                  | *Fig.2.2*
 
+### Side Issue -- Mask Island
+
+`Mask 1` with two islands
+:-------------------------:
+![](../images/mask_1_island.png)
+*Fig.3.1*                  
+
+There are two islands. If a user drags the region (shown in rectangle), since the two mask islands (circled in *Fig.3.1*) belong to `Mask 1`, the backend understands that an user tries to select objects in the rectangle region along with the `Mask 1`. 
 
 ### Another Option - A winner takes it all
 
