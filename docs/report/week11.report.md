@@ -59,7 +59,7 @@ If a pixel `(m, n)` is shared with `Mask 1` and `Mask 2`, then mapping logic fro
 
 ## Conclusion
 
-Should we conclude that Meta's SAM is not good enough to use for DietVision? I don't think so. A number of factors are taken into consideration for a mask generator. It should consider a color diffusion and a shade of an object. In my opinion, to improve the accuracy of the segment group selection, we should consider developing a solid classification model. That way, we can do reduce and combine a similar kind of masks. Here's a logic.
+Should we conclude that Meta's SAM is not good enough for DietVision? I don't think so. A number of factors are taken into consideration for a mask generator. It should consider a color diffusion and a shade of an object. In my opinion, to improve the accuracy of the segment group selection, we should consider developing a solid classification model. That way, we can do reduce and combine a similar kind of masks. Here's a logic.
 
 ```text
 - Segments an input image. This produces a list of masks.
