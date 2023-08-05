@@ -57,51 +57,49 @@ class DietVision:
             'class': None,
             'attached_to': idx,
             'nonzero_at': set(np.rec.fromarrays(np.nonzero(mask['segmentation'])).tolist())
-        } for idx, mask in enumerate(sorted(self.sam_result, key=lambda x: x['area'], reverse=True))]
+        } for idx, mask in enumerate(sorted(self.sam_result, key=lambda x: x['area'], reverse=False))]
         
         self.height, self.width = self.raw_diet_vision_dictionary[0]['mask'].shape
 
-        mask_dictionary = np.full((self.height, self.width), -1)
+        self.mask_dictionary = np.full((self.height, self.width), -1)
 
         for idx, curr_dvd in enumerate(self.raw_diet_vision_dictionary):
-            for pixel in curr_dvd['nonzero_at']:
-                if mask_dictionary[pixel] == -1:
-                    mask_dictionary[pixel] = idx
-                else:
-                    mask_dictionary[pixel] = min(idx, mask_dictionary[pixel])
+            self.mask_dictionary[tuple(zip(*curr_dvd['nonzero_at']))] = idx
 
-                curr_dvd['attached_to'] = mask_dictionary[pixel]
+        dvd_index = 0
+        self.diet_vision_dictionary = []
 
-        dict_mask_groups = {}
+        for idx in range(0, len(self.raw_diet_vision_dictionary)):
+            tups = np.where(self.mask_dictionary == idx)
 
-        for idx, dvd in enumerate(self.raw_diet_vision_dictionary):
-            if dvd['attached_to'] in dict_mask_groups:
-                dict_mask_groups[dvd['attached_to']].append(idx)
-            else:
-                dict_mask_groups.update({dvd['attached_to']: [idx]})
-
-        self.diet_vision_dictionary = [{
-            'mask': self._combine_masks_init(v),
-            'class': None,
-            'attached_to': idx,
-            'nonzero_at': set(np.rec.fromarrays(np.nonzero(self._combine_masks_init(v))).tolist()),
-            'area': len(set(np.rec.fromarrays(np.nonzero(self._combine_masks_init(v))).tolist()))
-        } for idx, v in enumerate(dict_mask_groups.values())]
+            if tups[0].size > 0 and tups[0].size == tups[1].size:
+                mask = np.full((self.height, self.width), False)
+                mask[tups] = True
+                nonzero_at = set(np.rec.fromarrays(np.nonzero(mask)).tolist())
+                self.diet_vision_dictionary.append({
+                    'mask': mask,
+                    'class': None,
+                    'attached_to': dvd_index,
+                    'nonzero_at': nonzero_at,
+                    'area': len(nonzero_at)
+                })
+                dvd_index += 1
 
     def _generate_blank_transparent_image(self):
-        """One time set up at image upload"""
+        """
+        Generate a blank transparent image and 
+        """
         transparent_image_file_name = 'blank_transparent_image.png'
         self.blank_transparent_image_path = os.path.join(self.HOME, 'images', transparent_image_file_name)
 
         if os.path.exists(self.blank_transparent_image_path):
-            os.system(f'rm {self.blank_transparent_image_path}')
+            os.remove(self.blank_transparent_image_path)
 
         blank_white_image = 255 * np.ones((self.height, self.width, 3), dtype = np.uint8)
         im_rgba = Image.fromarray(blank_white_image).convert('RGBA')
-        im_rgba_data = im_rgba.getdata()
         im_rgba_new_data = []
 
-        for item in im_rgba_data:
+        for item in im_rgba.getdata():
             if item[0] == 255 and item[1] == 255 and item[2] == 255:
                 im_rgba_new_data.append((255, 255, 255, 0))
             else:
@@ -111,13 +109,18 @@ class DietVision:
         im_rgba.save(self.blank_transparent_image_path, "PNG")
 
     def create_overlay_image(self, is_all: bool = True, indices: list = None) -> str:
-        """Annotate mask and put that on blank image"""
-        transparent_image_test = cv2.imread(self.blank_transparent_image_path)
-        transparent_image_test = transparent_image_test.copy()
-        annotated_mask_test = self._generate_image_annotator() if is_all else self._spot_annotator_on_mask(indices)
+        """
+        Fill in masks with colors
 
-        img1_test = Image.fromarray(transparent_image_test).convert('RGBA')
-        img2_test = Image.fromarray(annotated_mask_test).convert('RGBA')
+        ATTRIBUTES:
+            is_all: Fill in all masks if True, fill in only selected masks otherwise
+            indices: A list of mask index that need to be filled in with colors (is_all = False only)
+        """
+        transparent_image = cv2.imread(self.blank_transparent_image_path).copy()
+        annotated_mask = self._generate_image_annotator() if is_all else self._spot_annotator_on_mask(indices)
+
+        img1_test = Image.fromarray(transparent_image).convert('RGBA')
+        img2_test = Image.fromarray(annotated_mask).convert('RGBA')
 
         img_test_new_data = []
 
@@ -132,13 +135,10 @@ class DietVision:
         utc_time = str(calendar.timegm(date.utctimetuple()))
 
         image_name = f'annotator_image_{utc_time}.png' if is_all else f'overlay_image_{utc_time}.png'
-        overlay_image_path = os.path.join(self.HOME, 'images', image_name)
+        overlay_image_path = os.path.join(self.HOME, 'images', 'overlays', image_name)
         
         img1_test.putdata(img_test_new_data)        
         img1_test.save(overlay_image_path, "PNG")
-
-        # self._cleanup_image_stack()
-        # self._overlay_image_stack.append(overlay_image_path)
 
         return overlay_image_path
 
@@ -151,13 +151,13 @@ class DietVision:
         for idx in lst:
             if idx in mask_index_set:
                 mask_index_list = self._find_attached_index_list(idx)
+                mask_index_set -= set(mask_index_list)
                 print(f'{idx} = {mask_index_list}')
-                # mask_index_set -= set(mask_index_list)
 
                 if overlay_image is None:
                     overlay_image = self._spot_annotator_on_mask(mask_index_list)
-
-                overlay_image += self._spot_annotator_on_mask(mask_index_list)
+                else:
+                    overlay_image += self._spot_annotator_on_mask(mask_index_list)
 
         return overlay_image
 
@@ -182,7 +182,7 @@ class DietVision:
         )
     
     def _combine_masks(self, index_list: list) -> np.ndarray:
-        """(utlity) Annotate mask and put that on blank image"""
+        """Combine masks to group object"""
         i0 = index_list[0]
         combined_mask = self.diet_vision_dictionary[i0]['mask'].copy()
 
@@ -191,39 +191,30 @@ class DietVision:
             combined_mask = np.logical_or(combined_mask, curr_mask)
 
         return combined_mask
-    
-    def _combine_masks_init(self, index_list: list) -> np.ndarray:
-        """(utlity) Annotate mask and put that on blank image"""
-        i0 = index_list[0]
-        combined_mask = self.raw_diet_vision_dictionary[i0]['mask'].copy()
-
-        for idx in index_list[1:]:
-            curr_mask = self.raw_diet_vision_dictionary[idx]['mask'].copy()
-            combined_mask = np.logical_or(combined_mask, curr_mask)
-
-        return combined_mask
 
     def find_mask_index_list(self, bbox_plot: list, is_collect: bool = False) -> list:
         x1, y1, x2, y2 = bbox_plot
 
-        index_set = set()
-        diet_vision_dictionary_size = len(self.diet_vision_dictionary)
+        product_range = it.product(range(y1, y2+1), list(range(x1, x2+1)))
+        dvd_items = enumerate(self.diet_vision_dictionary)
 
-        for row, col in it.zip_longest(range(y1, y2+1), range(x1, x2+1)):
-            for idx in range(0, diet_vision_dictionary_size):
-                if (row, col) in self.diet_vision_dictionary[idx]['nonzero_at']:
-                    index_set.add(idx)
+        index_set = set(i for r, c in product_range for i, item in dvd_items if (r, c) in item['nonzero_at'])
+
+        # for row, col in it.product(range(y1, y2+1), list(range(x1, x2+1))):
+        #     for idx, dvd_item in enumerate(self.diet_vision_dictionary):
+        #         if (row, col) in dvd_item['nonzero_at']:
+        #             index_set.add(idx)
 
         if is_collect:
-            lst = self._index_group_list.copy()
-            self._index_group_list = sorted(list(set(lst) ^ index_set))
-
+            self._index_group_list = sorted(list(set(self._index_group_list) ^ index_set))
             return self._index_group_list
 
         return sorted(list(index_set))
     
     def get_data_by_mask_index(self, mask_index: int) -> any:
-        """retrieve food class and its area"""
+        """
+        Retrieve food class and its area
+        """
         dict_data = self.diet_vision_dictionary[mask_index]
         mask_indices = self._find_attached_index_list(mask_index)
 
@@ -231,7 +222,9 @@ class DietVision:
         return food_class, self._sum_area_of_selected_index_list(mask_indices)
     
     def _find_attached_index_list(self, selected_index: int) -> list:
-        """(utility) retrieve food class and its area"""
+        """
+        Find masks linked to the parent index. Mask with a largest area becomes the parent
+        """
         target_index = self.diet_vision_dictionary[selected_index]['attached_to']
 
         index_set = set()
@@ -243,7 +236,7 @@ class DietVision:
         return sorted(list(index_set))
 
     def _sum_area_of_selected_index_list(self, mask_index_list: list) -> int:
-        """(utility) retrieve food class and its area"""
+        """Calcuate total area of selected segments"""
         area = 0
 
         for idx in mask_index_list:

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.middleware.cors import CORSMiddleware
@@ -61,7 +61,7 @@ async def group_segments(bbox: BBox):
         indices = getInstance().find_mask_index_list(bbox_plot, True)
 
         if not indices:
-            return {'file_name': getInstance().blank_transparent_image_path}
+            return {'file_name': getInstance().blank_transparent_image_path.split('/')[-1]}
 
         overlay_image_path = getInstance().create_overlay_image(False, indices)
         overlay_image_name = overlay_image_path.split('/')[-1]
@@ -69,7 +69,7 @@ async def group_segments(bbox: BBox):
         return {'file_name': overlay_image_name}
 
     except Exception as ex:
-        return {'error_message': ex}
+        raise HTTPException(status_code=404, detail=str(ex))
 
 
 @app.post('/segment/data')
@@ -86,7 +86,7 @@ async def get_object_data(bbox: BBox):
         return { 'class': obj_class, 'volume': area }
     
     except Exception as ex:
-        return {'error_message': ex}
+        raise HTTPException(status_code=404, detail=str(ex))
 
 
 @app.post('/classify/modify')
@@ -99,7 +99,7 @@ async def update_food_class(fc: FoodClass):
         return { 'updated_food_class': fc.food_class, 'file_name': file_name }
 
     except Exception as ex:
-        return {'error_message': ex}
+        raise HTTPException(status_code=404, detail=str(ex))
 
 
 @app.get('/clear')
@@ -126,4 +126,4 @@ async def save_image(filename: str = Form(...), filedata: str = Form(...)):
             return { "file_name": overlay_image_name }
 
     except Exception as ex:
-        return {'error_message': ex}
+        raise HTTPException(status_code=404, detail=str(ex))
