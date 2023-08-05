@@ -13,4 +13,4 @@ No report for this week. The first draft of the app is [here](../app)
 
 ## Next week
 
-- 
+- UI Fix
