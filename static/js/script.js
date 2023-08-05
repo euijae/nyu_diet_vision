@@ -317,7 +317,7 @@ function createImage(isEmptyFile, isAnnotator = true) {
     var scaleFactor = isEmptyFile ? 0.5 : 0.25;
 
     if (isEmptyFile) {
-        img.src = '../../static/empty.png';
+        img.src = '../../static/images/empty.png';
         img.onload = function() {
             canvas.style.width = img.width * scaleFactor + 'px';
             canvas.style.height = img.height * scaleFactor + 'px';

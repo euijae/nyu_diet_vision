@@ -6,6 +6,8 @@ from pathlib import Path
 from .diet_vision import DietVision
 from pydantic import BaseModel
 import requests, os, base64
+import uvicorn
+
 
 class BBox(BaseModel):
     x1: float
@@ -127,3 +129,6 @@ async def save_image(filename: str = Form(...), filedata: str = Form(...)):
 
     except Exception as ex:
         raise HTTPException(status_code=404, detail=str(ex))
+
+def run():
+    uvicorn.run("app.main:app", reload=True)
