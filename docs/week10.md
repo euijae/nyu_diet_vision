@@ -2,7 +2,7 @@
 
 ## Last week
 
-- start wrapping up the projec
+- start wrapping up the project
 
 ## Study
 

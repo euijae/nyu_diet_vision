@@ -1,3 +1,6 @@
 weights/
 weights/**
 __pycache__/
+**/*.npy
+.python-version
+overlays/

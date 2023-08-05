@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <link href="http://raw.githubusercontent.com/euijae/nyu_diet_vision/week10/static/images/nyu_logo.png" rel="shortcut icon" type="image/x-icon">
+        <link href="http://raw.githubusercontent.com/euijae/nyu_diet_vision/main/static/nyu_logo.png" rel="shortcut icon" type="image/x-icon">
 
         <title>DietVision</title>
         <meta name="title" content="DietVision 2023">
@@ -16,11 +16,15 @@
             <div class="flex">
                 <div class="left">
                     <!-- <h2>Food Image</h2> -->
+                    <div class="ui green compact message" id="introMessage">
+                        <div class="header">
+                          Please upload your image. 2592 x 1936 size is recommended
+                        </div>
+                      </div>
                     <canvas id="canvas"></canvas>
                     <div style="margin-top: 20px;">
                         <button id="saveImage" class="ui primary button">Upload</button>
                         <button id="clear" class="ui secondary button">Clear</button>
-                        <!-- <p class="show_normalized" id="coords" style="display: none;">x: <span id="x"></span> | y: <span id="y"></span></p> -->
                     </div>
                 </div>
                 <div class="right">
@@ -31,6 +35,7 @@
                             <div class="or"></div>
                             <button class="ui button" id="modifyFoodClass">Modfiy Food Class</button>
                         </div>
+                        <input id="fileContainer" type="file" name="uploaded_file" style="visibility: hidden;position: absolute;top:0;">
                     </div>
 
                     <div class="ui center aligned basic segment">
@@ -40,7 +45,7 @@
                                 <input class="prompt" id="myFoodClassInput" type="text" placeholder="Search food...">
                                 <i class="search icon"></i>
                             </div>
-                            <button id="submitFoodClassInput" class="ui button disabled">
+                            <button class="ui button disabled" id="submitFoodClassInput">
                                 Submit
                             </button>
                             <div class="results"></div>
@@ -55,42 +60,18 @@
                                 <tr>
                                     <th>Food</th>
                                     <th>Volume</th>
-                                    <th>Calories</th>
                                 </tr>
                             </thead>
                             <tbody id="tableBody1">
                                 <tr>
-                                    <td colspan="3">No Image is Found</td>
+                                    <td colspan="2">No Image is Found</td>
                                 </tr>
                             </tbody>
                             <tbody id="tableBody2" style="display: none">
-                                <tr>
-                                    <td colspan="3">Modfiying is in progress ...</td>
-                                </tr>
-                            </tbody>
-                            <tbody id="tableBody3" style="display: none">
-                                
                             </tbody>
                         </table>
                     </div>
-
-
-                    
-                    
-                    <!-- <pre id="python">
-                        <code>
-                        </code>
-                    </pre> -->
-                    <!-- <a href="" id="updateFoodClass" class="widgetButton">Update Fodd</a>
-                    <a href="" id="switchButton" class="widgetButton">Group On/Off</a>
-                    <a href="" id="clipboard" class="widgetButton">Copy My Food Data to Clipboard</a> -->
                 </div>
-            </div>
-
-            <!-- old code - legacy -->
-            <div class="show_normalized" style="margin-bottom: 25px; display:none">
-                <label for="normalize_checkbox">Show Normalized Points from 0-1</label>
-                <input type="checkbox" id="normalize_checkbox" name="normalize_checkbox" value="normalize_checkbox">
             </div>
 
             <!-- spinner -->
@@ -106,10 +87,11 @@
         <!-- css stylesheets -->
         <link rel="stylesheet" href="{{ url_for('static', path='/css/main.css') }}" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" />
+
         <!-- JavaScript library -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>        
         <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
-        <script src="{{ url_for('static', path='/js/ontology.js') }}"></script>
+        <script src="{{ url_for('static', path='/js/usdaFoods.js') }}"></script>
         <script src="{{ url_for('static', path='/js/script.js') }}"></script>
     </body>
 </html>
