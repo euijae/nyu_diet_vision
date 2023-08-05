@@ -317,7 +317,7 @@ function createImage(isEmptyFile, isAnnotator = true) {
     var scaleFactor = isEmptyFile ? 0.5 : 0.25;
 
     if (isEmptyFile) {
-        img.src = '../../static/images/read-only/empty.png';
+        img.src = '../../static/empty.png';
         img.onload = function() {
             canvas.style.width = img.width * scaleFactor + 'px';
             canvas.style.height = img.height * scaleFactor + 'px';
@@ -338,7 +338,7 @@ function createImage(isEmptyFile, isAnnotator = true) {
             ctx.clearRect(0, 0, img.width * scaleFactor + 'px', img.height * scaleFactor + 'px');
             ctx.drawImage(img, 0, 0);
             var overlayImage = new Image();
-            overlayImage.src = `../../static/images/${isAnnotator ? annotatorImageName : lastOverlayImageName}`;
+            overlayImage.src = `../../static/images/overlays/${isAnnotator ? annotatorImageName : lastOverlayImageName}`;
             overlayImage.onload = function() {
                 ctx.drawImage(overlayImage, 0, 0)
             }
