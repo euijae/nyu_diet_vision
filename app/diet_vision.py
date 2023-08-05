@@ -70,10 +70,10 @@ class DietVision:
         self.diet_vision_dictionary = []
 
         for idx in range(0, len(self.raw_diet_vision_dictionary)):
+            mask = np.full((self.height, self.width), False)
             tups = np.where(self.mask_dictionary == idx)
 
             if tups[0].size > 0 and tups[0].size == tups[1].size:
-                mask = np.full((self.height, self.width), False)
                 mask[tups] = True
                 nonzero_at = set(np.rec.fromarrays(np.nonzero(mask)).tolist())
                 self.diet_vision_dictionary.append({
@@ -85,6 +85,14 @@ class DietVision:
                 })
                 dvd_index += 1
 
+        # self.diet_vision_dictionary = [{
+        #     'mask': mask,
+        #     'class': None,
+        #     'attached_to': idx,
+        #     'nonzero_at': set(np.rec.fromarrays(np.nonzero(mask)).tolist()),
+        #     'area': len(set(np.rec.fromarrays(np.nonzero(mask)).tolist()))
+        # } for idx, mask in enumerate(masks)]
+
     def _generate_blank_transparent_image(self):
         """
         Generate a blank transparent image and 
@@ -93,13 +101,14 @@ class DietVision:
         self.blank_transparent_image_path = os.path.join(self.HOME, 'images', transparent_image_file_name)
 
         if os.path.exists(self.blank_transparent_image_path):
-            os.remove(self.blank_transparent_image_path)
+            os.system(f'rm {self.blank_transparent_image_path}')
 
         blank_white_image = 255 * np.ones((self.height, self.width, 3), dtype = np.uint8)
         im_rgba = Image.fromarray(blank_white_image).convert('RGBA')
+        im_rgba_data = im_rgba.getdata()
         im_rgba_new_data = []
 
-        for item in im_rgba.getdata():
+        for item in im_rgba_data:
             if item[0] == 255 and item[1] == 255 and item[2] == 255:
                 im_rgba_new_data.append((255, 255, 255, 0))
             else:
@@ -116,7 +125,8 @@ class DietVision:
             is_all: Fill in all masks if True, fill in only selected masks otherwise
             indices: A list of mask index that need to be filled in with colors (is_all = False only)
         """
-        transparent_image = cv2.imread(self.blank_transparent_image_path).copy()
+        transparent_image = cv2.imread(self.blank_transparent_image_path)
+        transparent_image = transparent_image.copy()
         annotated_mask = self._generate_image_annotator() if is_all else self._spot_annotator_on_mask(indices)
 
         img1_test = Image.fromarray(transparent_image).convert('RGBA')
@@ -195,18 +205,18 @@ class DietVision:
     def find_mask_index_list(self, bbox_plot: list, is_collect: bool = False) -> list:
         x1, y1, x2, y2 = bbox_plot
 
-        product_range = it.product(range(y1, y2+1), list(range(x1, x2+1)))
-        dvd_items = enumerate(self.diet_vision_dictionary)
+        index_set = set()
+        diet_vision_dictionary_size = len(self.diet_vision_dictionary)
 
-        index_set = set(i for r, c in product_range for i, item in dvd_items if (r, c) in item['nonzero_at'])
-
-        # for row, col in it.product(range(y1, y2+1), list(range(x1, x2+1))):
-        #     for idx, dvd_item in enumerate(self.diet_vision_dictionary):
-        #         if (row, col) in dvd_item['nonzero_at']:
-        #             index_set.add(idx)
+        for row, col in it.product(range(y1, y2+1), range(x1, x2+1)):
+            for idx in range(0, diet_vision_dictionary_size):
+                if (row, col) in self.diet_vision_dictionary[idx]['nonzero_at']:
+                    index_set.add(idx)
 
         if is_collect:
-            self._index_group_list = sorted(list(set(self._index_group_list) ^ index_set))
+            lst = self._index_group_list.copy()
+            self._index_group_list = sorted(list(set(lst) ^ index_set))
+
             return self._index_group_list
 
         return sorted(list(index_set))
