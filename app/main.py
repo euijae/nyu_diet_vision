@@ -91,6 +91,15 @@ async def get_object_data(bbox: BBox):
         raise HTTPException(status_code=404, detail=str(ex))
 
 
+@app.get('/data/all')
+async def get_all_food_data():
+    try:
+        data_json = getInstance().get_all_food_data()
+        return { 'food_list': data_json }
+    except Exception as ex:
+        raise HTTPException(status_code=404, datail=str(ex))
+
+
 @app.post('/classify/modify')
 async def update_food_class(fc: FoodClass):
     try:

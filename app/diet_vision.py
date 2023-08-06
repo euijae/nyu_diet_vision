@@ -234,6 +234,14 @@ class DietVision:
         food_class = dict_data['class'] if dict_data['class'] else 'undetermined'
         return food_class, self._sum_area_of_selected_index_list(mask_indices)
     
+    def get_all_food_data(self) -> any:
+        dvd = self.diet_vision_dictionary
+        return sorted(
+            [ { 'class': m['class'], 'area': m['area'] } for m in dvd if m['class'] is not None],
+            key = lambda m: m['area'],
+            reverse = True
+        )
+    
     def _find_attached_index_list(self, selected_index: int) -> list:
         """
         Find masks linked to the parent index. Mask with a largest area becomes the parent
