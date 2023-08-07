@@ -106,8 +106,9 @@ async def update_food_class(fc: FoodClass):
         getInstance().update_food_class(fc.food_class)
         overlay_image_path = getInstance().create_overlay_image(True)
         file_name = overlay_image_path.split('/')[-1]
+        food_list = getInstance().get_all_food_data()
 
-        return { 'updated_food_class': fc.food_class, 'file_name': file_name }
+        return { 'food_list': food_list, 'file_name': file_name }
 
     except Exception as ex:
         raise HTTPException(status_code=404, detail=str(ex))
@@ -120,8 +121,7 @@ async def clear_images(request: Request):
 
 
 @app.post('/upload/image')
-async def save_image(filename: str = Form(...), filedata: str = Form(...)):    
-    # Pass
+async def save_image(filename: str = Form(...), filedata: str = Form(...)):
     try:
         static_directory = getInstance().HOME
         file_location = os.path.join(static_directory, 'images', filename)
@@ -138,6 +138,7 @@ async def save_image(filename: str = Form(...), filedata: str = Form(...)):
 
     except Exception as ex:
         raise HTTPException(status_code=404, detail=str(ex))
+
 
 def run():
     uvicorn.run("app.main:app", reload=True)

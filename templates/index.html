@@ -12,7 +12,7 @@
         <main>
             <h1 class="ui violet huge header">NYU DietVision Version 1.0</h1>
             <div class="ui divider"></div>
-            <br><br><br>
+            <br>
             <div class="flex">
                 <div class="left">
                     <!-- <h2>Food Image</h2> -->
@@ -28,18 +28,8 @@
                     </div>
                 </div>
                 <div class="right">
-                    <!-- <h2>Food Data</h2> -->
-                    <div class="ui segment">
-                        <div class="ui buttons">
-                            <button class="ui button" id="selectFoodClass">Select Food</button>
-                            <div class="or"></div>
-                            <button class="ui button" id="modifyFoodClass">Modfiy Food Class</button>
-                        </div>
-                        <input id="fileContainer" type="file" name="uploaded_file" style="visibility: hidden;position: absolute;top:0;">
-                    </div>
-
+                    <input id="fileContainer" type="file" name="uploaded_file" style="visibility: hidden;position: absolute;top:0;">
                     <div class="ui center aligned basic segment">
-                        <br>
                         <div class="ui search" style="float: left;">
                             <div class="ui icon input disabled" id="searchFoodClassInput">
                                 <input class="prompt" id="myFoodClassInput" type="text" placeholder="Search food...">
@@ -51,15 +41,11 @@
                             <div class="results"></div>
                         </div>
                         <br><br><br>
-                        <div class="ui horizontal divider">
-                          Or
-                        </div>
-                        <br>
                         <table class="ui selectable celled table">
                             <thead>
                                 <tr>
                                     <th>Food</th>
-                                    <th>Volume</th>
+                                    <th>Area</th>
                                 </tr>
                             </thead>
                             <tbody id="tableBody1">
@@ -78,7 +64,7 @@
             <div id="cover-spin"></div>
 
             <!-- footer -->
-            <br><br><br>
+            <br><br>
             <footer>
                 <p>Made with ❤️ by Prof. <a href="https://cs.nyu.edu/~shasha/" target="_blank">Dennis Shasha</a>'s Research Group at <a href="https://nyu.edu/" target="_blank">New York University</a> </p>
             </footer>

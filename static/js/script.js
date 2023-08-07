@@ -64,8 +64,8 @@ document.querySelector('#clear').addEventListener('click', function(e) {
         };
         xmlHttp.send(null)
 
-        $('#selectFoodClass').removeClass('green');
-        $('#modifyFoodClass').removeClass('green');
+        // $('#selectFoodClass').removeClass('green');
+        // $('#modifyFoodClass').removeClass('green');
         $('#tableBody2 tr').remove();
         $('#tableBody1').css('display', '');
     }
@@ -110,7 +110,7 @@ function uploadFile(filename, filedata) {
         canvas.style.cursor = 'pointer';
 
         createImage(false);
-        toggleSelectModfiy(true);
+        clearMyFoodClassInput();
 
         $('#tableBody1').css('display', 'none');
         $('#tableBody2').css('display', '');
@@ -122,13 +122,11 @@ function uploadFile(filename, filedata) {
     });
 }
 
-let x1;
-let y1;
-let x2;
-let y2;
+let x1, y1, x2, y2;
 
 canvas.addEventListener('mousedown', function(e) {
     if (imageReady) {
+        scaleFactor = 0.25;
         x1 = getScaledCoords(e)[0];
         y1 = getScaledCoords(e)[1];
 
@@ -143,78 +141,53 @@ canvas.addEventListener('mouseup', function(e) {
 
     const xmlHttp = new XMLHttpRequest();
 
-    if ($("#modifyFoodClass").hasClass('green')) {
-        x2 = getScaledCoords(e)[0];
-        y2 = getScaledCoords(e)[1];
+    scaleFactor = 0.25;
+    x2 = getScaledCoords(e)[0];
+    y2 = getScaledCoords(e)[1];
 
-        console.log(`(x1, y1, x2, y2) = (${x1}, ${y1}, ${x2}, ${y2}) / mouseup / modifyFoodClass`)
+    console.log(`(x1, y1, x2, y2) = (${x1}, ${y1}, ${x2}, ${y2}) / mouseup / modifyFoodClass`)
 
-        if (y1 > y2) [y1, y2] = [y2, y1]
-        if (x1 > x2) [x1, x2] = [x2, x1]
+    if (y1 > y2) [y1, y2] = [y2, y1]
+    if (x1 > x2) [x1, x2] = [x2, x1]
 
-        let width  = Math.abs(x1-x2);
-        let height = Math.abs(y1-y2);
-        
-        ctx.beginPath();
-        ctx.strokeStyle = rgb_color;
-        ctx.lineWidth = 4;
-        ctx.fill();
-        ctx.rect(x1, y1, width, height);
-        ctx.stroke();
+    let width  = Math.abs(x1-x2);
+    let height = Math.abs(y1-y2);
+    
+    ctx.beginPath();
+    ctx.strokeStyle = rgb_color;
+    ctx.lineWidth = 4;
+    ctx.fill();
+    ctx.rect(x1, y1, width, height);
+    ctx.stroke();
 
-        xmlHttp.onreadystatechange = function() { 
-            if (xmlHttp.readyState === xmlHttp.OPENED) {
-                $('#cover-spin').show(0)
-            }
-            if (xmlHttp.readyState === xmlHttp.DONE) {
-                if (xmlHttp.status === 200) {
-                    const responseObject = JSON.parse(xmlHttp.responseText);
-                    const file_image_name = responseObject.file_name;
-                    lastOverlayImageName = file_image_name;
-                    createImage(false, false);
-                }
-
-                $('#cover-spin').hide();
-            }
+    xmlHttp.onreadystatechange = function() { 
+        if (xmlHttp.readyState === xmlHttp.OPENED) {
+            console.log("/segment/group >> xmlHttp.readyState: ", xmlHttp.status);
+            $('#cover-spin').show(0)
         }
-        xmlHttp.open("POST", 'http://127.0.0.1:8000/segment/group', true);
-        xmlHttp.onprogress = function() {
-            console.log("LOADING: ", xmlHttp.status);
-            if (xmlHttp.status < 400) {
-                $('#cover-spin').show(0)
-            } else {
-                $('#cover-spin').hide()
+        if (xmlHttp.readyState === xmlHttp.DONE) {
+            if (xmlHttp.status === 200) {
+                const responseObject = JSON.parse(xmlHttp.responseText);
+                const file_image_name = responseObject.file_name;
+                lastOverlayImageName = file_image_name;
+                createImage(false, false);
+                turnOnSearch(true);
             }
-        };
-        xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xmlHttp.send(JSON.stringify({ 'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2 }))
-    } else {
-        xmlHttp.onreadystatechange = function() { 
-            if (xmlHttp.readyState === xmlHttp.DONE) { 
-                if (xmlHttp.status === 200) {
-                    const responseObject = JSON.parse(xmlHttp.responseText);
-                    const food_class = responseObject.class;
-                    const food_area = responseObject.volume;
 
-                    console.log(`food_class = ${food_class}, food_area = ${food_area}`);
-                    console.log(`(x1, y1) = (${x1}, ${y1}) / mouseup / selectFoodClass`)
-
-                    $('#tableBody2 tr').remove();
-                    $('#tableBody2').append(`
-                        <tr>
-                            <td>${food_class}</td>
-                            <td>${food_area}</td>
-                        </tr>
-                    `);
-                }
-
-                $('#cover-spin').hide();
-            }
+            $('#cover-spin').hide();
         }
-        xmlHttp.open("POST", 'http://127.0.0.1:8000/segment/data', true);
-        xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-        xmlHttp.send(JSON.stringify({ 'x1': x1, 'y1': y1, 'x2': x1, 'y2': y1 }))
     }
+    xmlHttp.open("POST", 'http://127.0.0.1:8000/segment/group', true);
+    xmlHttp.onprogress = function() {
+        console.log("/segment/group >> xmlHttp.onprogress: ", xmlHttp.status);
+        if (xmlHttp.status < 400) {
+            $('#cover-spin').show(0)
+        } else {
+            $('#cover-spin').hide()
+        }
+    };
+    xmlHttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xmlHttp.send(JSON.stringify({ 'x1': x1, 'y1': y1, 'x2': x2, 'y2': y2 }))
 });
 
 $('#submitFoodClassInput').on('click', function(e) {
@@ -233,9 +206,16 @@ $('#submitFoodClassInput').on('click', function(e) {
                 annotatorImageName = file_name;
                 
                 createImage(false, true);
-                toggleSelectModfiy(true);
+                clearMyFoodClassInput();
                 turnOnSearch(false);
-                $('#cover-spin').hide();
+                
+                const foodDictionary = responseObject.food_list;
+                console.log(foodDictionary)
+                
+                $('#tableBody2 tr').remove();
+                for (const [key, value] of Object.entries(foodDictionary)) {
+                    $('#tableBody2').append(`<tr><td>${key}</td><td>${value}</td></tr>`);
+                }
             }
 
             $('#cover-spin').hide();
@@ -255,48 +235,8 @@ $('#submitFoodClassInput').on('click', function(e) {
     xmlHttp.send(JSON.stringify({ 'food_class': modified_food_class }))
 })
 
-$('#selectFoodClass').on('click', function(e) {
-    e.preventDefault();
-    turnOnSearch(false);
-    toggleSelectModfiy(true);
-
-    if (imageReady) {
-        createImage(false);
-    }
-});
-
-$('#modifyFoodClass').on('click', function(e) {
-    e.preventDefault();
-    turnOnSearch(true);
-    toggleSelectModfiy(false);
-
-    $('#tableBody1').css('display', 'none');
-    $('#tableBody2 tr').remove();
-
-    if (imageReady) {
-        img.src = localStorage.getItem("originalImageData");
-        img.onload = function() {
-            scaleFactor = 0.25;
-            canvas.style.width = img.width * scaleFactor + 'px';
-            canvas.style.height = img.height * scaleFactor + 'px';
-            canvas.width = img.width;
-            canvas.height = img.height;
-            canvas.style.borderRadius = '10px';
-            ctx.clearRect(0, 0, img.width * scaleFactor + 'px', img.height * scaleFactor + 'px');
-            ctx.drawImage(img, 0, 0);
-        };
-    }
-});
-
-function toggleSelectModfiy(isSelect) {
-    if (isSelect) {
-        $('#selectFoodClass').addClass('green');
-        $('#modifyFoodClass').removeClass('green');
-        $('#myFoodClassInput').val('')
-    } else {
-        $('#selectFoodClass').removeClass('green');
-        $('#modifyFoodClass').addClass('green');
-    }
+function clearMyFoodClassInput() {
+    $('#myFoodClassInput').val('')
 }
 
 function turnOnSearch(isOn) {

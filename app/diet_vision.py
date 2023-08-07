@@ -236,11 +236,24 @@ class DietVision:
     
     def get_all_food_data(self) -> any:
         dvd = self.diet_vision_dictionary
-        return sorted(
+        all_food_list = sorted(
             [ { 'class': m['class'], 'area': m['area'] } for m in dvd if m['class'] is not None],
             key = lambda m: m['area'],
             reverse = True
         )
+        
+        dvd_dict = {}
+        
+        for item in all_food_list:
+            ic = item['class']
+            ia = item['area']
+            
+            if ic in dvd_dict:
+                dvd_dict[ic] += ia
+            else:
+                dvd_dict[ic] = ia
+        
+        return dvd_dict
     
     def _find_attached_index_list(self, selected_index: int) -> list:
         """
