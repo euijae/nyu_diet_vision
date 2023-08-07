@@ -4,3 +4,4 @@ __pycache__/
 **/*.npy
 .python-version
 overlays/
+blank_transparent*

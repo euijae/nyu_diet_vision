@@ -1,6 +1,7 @@
 import calendar
 import cv2
 import datetime
+import glob
 import random
 import torch
 import os
@@ -21,6 +22,7 @@ class DietVision:
 
         self.HOME = str(home_posix.as_posix())
         self.DEVICE = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        self.image_directory = os.path.join(self.HOME, 'images')
 
         CHECKPOINT_PATH = os.path.join(self.HOME, "weights", "sam_vit_h_4b8939.pth")
         MODEL_TYPE = 'vit_h'
@@ -29,10 +31,12 @@ class DietVision:
 
         self.mask_generator = SamAutomaticMaskGenerator(sam)
         self._index_group_list = []
+        
+        self.overlay_image_directory = os.path.join(self.image_directory, 'overlays')
+        if not os.path.exists(self.overlay_image_directory):
+            os.mkdir(self.overlay_image_directory)
 
     def upload_image(self, image_name):
-        self.image_directory = os.path.join(self.HOME, 'images')
-        
         self.image_path = os.path.join(self.image_directory, image_name)
         self.image_brg = cv2.imread(self.image_path) # np.ndarray
         self.original_image = cv2.cvtColor(self.image_brg, cv2.COLOR_BGR2RGB) # np.ndarray
@@ -66,8 +70,7 @@ class DietVision:
         for idx, curr_dvd in enumerate(self.raw_diet_vision_dictionary):
             self.mask_dictionary[tuple(zip(*curr_dvd['nonzero_at']))] = idx
 
-        dvd_index = 0
-        self.diet_vision_dictionary = []
+        dvd_index, self.diet_vision_dictionary = 0, []
 
         for idx in range(0, len(self.raw_diet_vision_dictionary)):
             mask = np.full((self.height, self.width), False)
@@ -230,6 +233,27 @@ class DietVision:
 
         food_class = dict_data['class'] if dict_data['class'] else 'undetermined'
         return food_class, self._sum_area_of_selected_index_list(mask_indices)
+    
+    def get_all_food_data(self) -> any:
+        dvd = self.diet_vision_dictionary
+        all_food_list = sorted(
+            [ { 'class': m['class'], 'area': m['area'] } for m in dvd if m['class'] is not None],
+            key = lambda m: m['area'],
+            reverse = True
+        )
+        
+        dvd_dict = {}
+        
+        for item in all_food_list:
+            ic = item['class']
+            ia = item['area']
+            
+            if ic in dvd_dict:
+                dvd_dict[ic] += ia
+            else:
+                dvd_dict[ic] = ia
+        
+        return dvd_dict
     
     def _find_attached_index_list(self, selected_index: int) -> list:
         """

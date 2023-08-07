@@ -21,9 +21,11 @@ matplotlib = "^3.7.2"
 fastapi = "^0.100.0"
 requests = "^2.31.0"
 python-multipart = "^0.0.6"
+uvicorn = "^0.23.2"
+torchvision = "^0.15.2"
 
 [tool.poetry.scripts]
-app = "app.main:start"
+app = "app.main:run"
 
 [build-system]
 requires = ["poetry-core"]
