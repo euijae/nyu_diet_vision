@@ -2,14 +2,14 @@
 
 ## Last week
 
-- get rid of food 101 classification as it's not as accurate as what it's supposed to be.
-- instead, retrieve a food list and let user updates the food class.
-- in landing page, segment image should be displayed.
-- then have use update food class.
+- get rid of the food 101 classification as it's not as accurate as what it's supposed to be.
+- instead, retrieve a food list and let the user updates the food class.
+- in a landing page, a segmented image should be displayed.
+- then have use update, food class.
 
 ## Study
 
-No report for this week. The first draft of the app is [here](../app)
+A link to the report [here](./report/week11_report.md)
 
 ## Next week
 
