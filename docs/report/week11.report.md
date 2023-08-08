@@ -42,12 +42,12 @@ Select `Mask 1`              |  Unselect `Mask 1`
 
 There are two islands (circled in *Fig.3.1*). If a user selects the region shown in the *Fig.3.1* (rectangle), since the two mask islands (circled in *Fig.3.1*) belong to `Mask 1` although these are separate from the main area, the backend understands that a user tries to select objects in the rectangle region along with the `Mask 1`. This makes segmentation group selection unpredictable until we look into every mask.
 
-On the other hand, the Missing Pixels indicate that necessary pixels don't belong to expected masks whereas the Mask Island indicates that unnecessary pixels do belong to a mask unexpectedly. 
+On the other hand, the Missing Pixels indicate that necessary pixels don't belong to expected masks whereas the Mask Island indicates that unnecessary pixels do belong to a mask unexpectedly. *Fig.4.2* shows that pixels of the green pasta are not detected when segmenting objects, thus these missing pixels don't belong to any masks.
 
 Green Sauced Pasta         |  Pixels of Pasta Objects are missing
 :-------------------------:|:--------------------------:
-![](../images/green_pasta.png)|![](../images/mask_green_pasta.png)
-*Fig.2.1*                  | *Fig.2.2*
+![](../images/green_pasta.jpg)|![](../images/mask_green_pasta.png)
+*Fig.4.1*                  | *Fig.4.2*
 
 ### Another Option - A winner takes it all
 
