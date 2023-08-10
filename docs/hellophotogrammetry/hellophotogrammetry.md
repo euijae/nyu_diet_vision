@@ -38,6 +38,7 @@ Metrics in `USDZ`
 - Image order: Each image must be continuous.
 
 Good case. Outcome is as expected.
+
 `Frame 1`             |  `Frame 2`              
 :-------------------------:|:--------------------------:
 ![](../images/frame0.jpg)  |  ![](../images/frame6.jpg) 
