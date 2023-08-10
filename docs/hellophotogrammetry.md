@@ -56,7 +56,7 @@ for prim_ref in stage.Traverse():
           pass
 ```
 
-The output of the code above. You get an array of two triples. 
+This is the output of the `prim_ref.GetProperty(prop).Get()`. You get an array of two triples. 
 
 ```shell
 [(-0.27488237619400024, -0.2523643374443054, -0.2305058389902115),
