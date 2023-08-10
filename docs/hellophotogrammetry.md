@@ -39,10 +39,10 @@ Please submit an access request. Account holder will approve your request.
 
 ### Code
 
-This is a snippet and not optimized. 
+This is a snippet and not optimized. Please google `usd-core` to learn more about the package.
 
 ```python
-from pxr import Usd, Vt
+from pxr import Usd
 stage = Usd.Stage.Open(f'{HOME}/Burger.usdz') # Assume that I created Burger.usdz using HelloPhotogrammetry
 
 for prim_ref in stage.Traverse():
