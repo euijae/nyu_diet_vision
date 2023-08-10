@@ -30,7 +30,24 @@ Please submit an access request. Account holder will approve your request.
 - Run time: Usually, it takes at least 5 minutes. This is considerably an import factor when you integrate the program into DietVision. 
 - Metadata from `USDZ`: See attached image below
 
-- Image order: Each image must be continuous. 
+Metrics in `USDZ`             
+:-------------------------:
+![](../images/usdz_metrics.png)  
+*Fig.1.1* 
+
+- Image order: Each image must be continuous.
+
+Good case. Outcome is as expected.
+`Frame 1`             |  `Frame 2`              
+:-------------------------:|:--------------------------:
+![](../images/frame1.jpg)  |  ![](../images/frame6.jpg) 
+*Fig.2.1*                  | *Fig.2.2*                  
+
+Bad case. Outcome is not as expected.
+`Frame 1`             |  `Frame 100`
+:-------------------------:|:--------------------------:
+![](../images/frame1.jpg)  |  ![](../images/frame100.jpg) 
+*Fig.3.1*                  | *Fig.3.2*                  
 
 ## Volume Calculation
 
@@ -63,3 +80,9 @@ This is the output of the `prim_ref.GetProperty(prop).Get()`. You get an array o
 [(-0.27488237619400024, -0.2523643374443054, -0.2305058389902115), # (width, height, depth)
 (0.23457875847816467, 0.41973328590393066, 0.2716067433357239)]    # (width, height, depth)
 ```
+
+In *Fig.1.1*, you get (width, height, depth) = (0.509, 0.672, 0.502). The way you can compute the values obtained in the `USDZ` is as below:
+
+- 0.509 = abs(-0.27488237619400024) + abs(0.23457875847816467)
+- 0.672 = abs(-0.2523643374443054) + abs(0.41973328590393066)
+- 0.502 = abs(-0.2305058389902115) + abs(0.2716067433357239)
