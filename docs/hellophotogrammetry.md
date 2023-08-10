@@ -56,7 +56,9 @@ for prim_ref in stage.Traverse():
           pass
 ```
 
-The output of the code above
-```shell
+The output of the code above. You get an array of two triples. 
 
+```shell
+[(-0.27488237619400024, -0.2523643374443054, -0.2305058389902115),
+(0.23457875847816467, 0.41973328590393066, 0.2716067433357239)]
 ```
