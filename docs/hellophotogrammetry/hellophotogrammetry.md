@@ -40,13 +40,13 @@ Metrics in `USDZ`
 Good case. Outcome is as expected.
 `Frame 1`             |  `Frame 2`              
 :-------------------------:|:--------------------------:
-![](../images/frame1.jpg)  |  ![](../images/frame6.jpg) 
+![](../images/frame0.jpg)  |  ![](../images/frame6.jpg) 
 *Fig.2.1*                  | *Fig.2.2*                  
 
 Bad case. Outcome is not as expected.
 `Frame 1`             |  `Frame 100`
 :-------------------------:|:--------------------------:
-![](../images/frame1.jpg)  |  ![](../images/frame100.jpg) 
+![](../images/frame0.jpg)  |  ![](../images/frame100.jpg) 
 *Fig.3.1*                  | *Fig.3.2*                  
 
 ## Volume Calculation
