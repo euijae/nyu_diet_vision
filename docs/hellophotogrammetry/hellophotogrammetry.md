@@ -29,7 +29,8 @@ Please submit an access request. Account holder will approve your request.
 - Size of image set: The more you have the better outcome gets. In other words, the less you have the less accurate outcome gets.
 - Run time: Usually, it takes at least 5 minutes. This is considerably an import factor when you integrate the program into DietVision. 
 - Metadata from `USDZ`: See attached image below
-- Image order: See example below
+
+- Image order: Each image must be continuous. 
 
 ## Volume Calculation
 
@@ -58,7 +59,7 @@ for prim_ref in stage.Traverse():
 
 This is the output of the `prim_ref.GetProperty(prop).Get()`. You get an array of two triples. 
 
-```shell
-[(-0.27488237619400024, -0.2523643374443054, -0.2305058389902115),
-(0.23457875847816467, 0.41973328590393066, 0.2716067433357239)]
+```python
+[(-0.27488237619400024, -0.2523643374443054, -0.2305058389902115), # (width, height, depth)
+(0.23457875847816467, 0.41973328590393066, 0.2716067433357239)]    # (width, height, depth)
 ```
